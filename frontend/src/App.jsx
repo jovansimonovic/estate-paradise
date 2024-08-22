@@ -6,10 +6,12 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import Header from "./components/Header";
 
 const App = () => {
   return (
     <Router>
+      <Header />
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/login" exact element={<LogIn />} />
