@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 
 // connects to MongoDB Atlas
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 // routers
+app.use("/auth", authRouter);
 app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () => {
