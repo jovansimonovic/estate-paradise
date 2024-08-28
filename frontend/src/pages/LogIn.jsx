@@ -1,29 +1,71 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import PasswordInput from "../components/PasswordInput";
+import Axios from "../utils/axios";
+import { toast } from "react-toastify";
 
 const LogIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!username || !password) {
+      setError("All fields are required");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const formData = { username, password };
+      const response = await Axios.post("/auth/login", formData);
+
+      if (response.data.success === false) {
+        setError(response.data.message);
+        setLoading(false);
+        return;
+      }
+
+      if (response.data && response.data.message) {
+        toast.success(response.data.message);
+        setError(null);
+        setLoading(false);
+        navigate("/");
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error.response.data.message);
+    }
+  };
 
   return (
     <div className="mt-36 flex flex-col justify-center items-center">
       <h2 className="text-3xl font-semibold">Log In</h2>
-      <form className="flex flex-col mt-8 w-[380px]">
+      <form className="flex flex-col mt-8 w-[380px]" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Email"
           className="input-box mb-4"
+          value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <input
-          type="password"
-          placeholder="Password"
-          className="input-box mb-8"
+        <PasswordInput
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
         <div className="grid grid-flow-col gap-x-4">
-          <button type="submit" className="btn-primary">
-            LOG IN
+          <button
+            disabled={loading}
+            type="submit"
+            className="btn-primary disabled:opacity-80"
+          >
+            {loading ? "Loading..." : "Log In"}
           </button>
           <button
             aria-label="Sign in with Google"
@@ -56,7 +98,7 @@ const LogIn = () => {
               </svg>
             </div>
             <span className="flex-1 text-md font-semibold text-white">
-              CONTINUE WITH GOOGLE
+              Continue with Google
             </span>
           </button>
         </div>
