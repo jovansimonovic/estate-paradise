@@ -76,17 +76,12 @@ export const login = async (req, res, next) => {
 
     const { password: hashedPassword, ...otherDetails } = foundUser._doc;
 
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      })
-      .status(200)
-      .json({
-        success: true,
-        message: "User logged in successfully",
-        user: otherDetails,
-      });
+    res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
+      user: otherDetails,
+      token,
+    });
   } catch (error) {
     next(errorHandler(500, error.message));
   }
