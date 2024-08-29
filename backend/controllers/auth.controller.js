@@ -1,6 +1,8 @@
+import "dotenv/config";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import { errorHandler } from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -68,9 +70,22 @@ export const login = async (req, res, next) => {
       return next(errorHandler(401, "Invalid username or password"));
     }
 
-    return res
-      .status(200)
-      .json({ success: true, message: "User logged in successfully" });
+    const token = jwt.sign({ id: foundUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    const { password: hashedPassword, ...otherDetails } = foundUser._doc;
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      })
+      .json({
+        success: true,
+        message: "User logged in successfully",
+        user: otherDetails,
+      });
   } catch (error) {
     next(errorHandler(500, error.message));
   }
