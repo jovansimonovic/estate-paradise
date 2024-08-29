@@ -5,7 +5,7 @@ import Axios from "../utils/axios";
 import { toast } from "react-toastify";
 
 const LogIn = () => {
-  const [username, setUsername] = useState("");
+  const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -15,14 +15,14 @@ const LogIn = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (!username || !password) {
+    if (!email || !password) {
       setError("All fields are required");
       setLoading(false);
       return;
     }
 
     try {
-      const formData = { username, password };
+      const formData = { email, password };
       const response = await Axios.post("/auth/login", formData);
 
       if (response.data.success === false) {
@@ -51,7 +51,7 @@ const LogIn = () => {
           type="text"
           placeholder="Email"
           className="input-box mb-4"
-          value={username}
+          value={email}
           onChange={(e) => setUsername(e.target.value)}
         />
         <PasswordInput

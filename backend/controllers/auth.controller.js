@@ -45,14 +45,18 @@ export const signup = async (req, res, next) => {
 };
 
 export const login = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !password) {
+  if (!email || !password) {
     return next(errorHandler(400, "Both fields are required"));
   }
 
+  if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+    return next(errorHandler(400, "Invalid email address"));
+  }
+
   try {
-    const foundUser = await User.findOne({ username });
+    const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
       return next(errorHandler(404, "User not found"));
