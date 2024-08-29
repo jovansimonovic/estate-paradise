@@ -50,7 +50,7 @@ const SignUp = () => {
         return;
       }
 
-      if (response.data && response.data.message) {
+      if (response.data.success === true) {
         toast.success(response.data.message);
         setError(null);
         setLoading(false);

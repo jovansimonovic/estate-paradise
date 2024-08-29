@@ -31,7 +31,8 @@ const LogIn = () => {
         return;
       }
 
-      if (response.data && response.data.message) {
+      if (response.data.success === true) {
+        localStorage.setItem("token", response.data.token);
         toast.success(response.data.message);
         setError(null);
         setLoading(false);
