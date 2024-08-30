@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
+import { CgProfile } from "react-icons/cg";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { user } = useSelector((state) => state.user);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-7xl mx-auto p-3">
@@ -27,9 +31,19 @@ const Header = () => {
           <li className="hidden sm:block hover:text-slate-500">
             <Link to="/about">About</Link>
           </li>
-          <li className="hover:text-slate-500">
-            <Link to="/login">Log In</Link>
-          </li>
+          {user ? (
+            <>
+              <li className="hover:text-slate-500">
+                <Link to="/login">
+                  <CgProfile size={30} />
+                </Link>
+              </li>
+            </>
+          ) : (
+            <li className="hover:text-slate-500">
+              <Link to="/login">Log In</Link>
+            </li>
+          )}
         </ul>
       </div>
     </header>
