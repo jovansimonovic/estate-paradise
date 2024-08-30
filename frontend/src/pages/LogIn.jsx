@@ -3,21 +3,27 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
 import Axios from "../utils/axios";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  logInStart,
+  logInSuccess,
+  logInFailure,
+} from "../features/user/userSlice";
 
 const LogIn = () => {
   const [email, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const { error, loading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(logInStart());
 
     if (!email || !password) {
-      setError("All fields are required");
-      setLoading(false);
+      dispatch(logInFailure("All fields are required"));
       return;
     }
 
@@ -26,21 +32,18 @@ const LogIn = () => {
       const response = await Axios.post("/auth/login", formData);
 
       if (response.data.success === false) {
-        setError(response.data.message);
-        setLoading(false);
+        dispatch(logInFailure(response.data.message));
         return;
       }
 
       if (response.data.success === true) {
+        dispatch(logInSuccess(response.data.user));
         localStorage.setItem("token", response.data.token);
         toast.success(response.data.message);
-        setError(null);
-        setLoading(false);
         navigate("/");
       }
     } catch (error) {
-      setLoading(false);
-      setError(error.response.data.message);
+      dispatch(logInFailure(error.response.data.message));
     }
   };
 
