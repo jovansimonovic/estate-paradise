@@ -23,7 +23,7 @@ const LogIn = () => {
     dispatch(logInStart());
 
     if (!email || !password) {
-      dispatch(logInFailure("All fields are required"));
+      dispatch(logInFailure("Both fields are required"));
       return;
     }
 
