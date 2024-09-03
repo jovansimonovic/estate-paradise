@@ -44,7 +44,7 @@ const LogIn = () => {
         navigate("/");
       }
     } catch (error) {
-      dispatch(logInFailure(error.response.data.message));
+      dispatch(logInFailure("Something went wrong. Please try again"));
     }
   };
 
