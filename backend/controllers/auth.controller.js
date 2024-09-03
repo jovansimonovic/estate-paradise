@@ -86,3 +86,66 @@ export const login = async (req, res, next) => {
     next(errorHandler(500, error.message));
   }
 };
+
+export const googleAuth = async (req, res, next) => {
+  const { name, email, image } = req.body;
+
+  try {
+    const foundUser = await User.findOne({ email });
+
+    if (!foundUser) {
+      // removes whitespace from the username, makes it
+      // lowercase and adds 4 random numbers at the end
+      const username =
+        name.split(" ").join("").toLowerCase() +
+        Math.floor(10000 + Math.random() * 90000)
+          .toString()
+          .slice(-4);
+
+      // generates a 16-character password
+      // containing letters and numbers
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+
+      const newUser = new User({
+        username,
+        email,
+        password: hashedPassword,
+        avatar: image,
+      });
+
+      await newUser.save();
+
+      const { password: password, ...otherDetails } = newUser._doc;
+
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "User registered successfully",
+        user: otherDetails,
+        token,
+      });
+    }
+
+    const token = jwt.sign({ id: foundUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    const { password: password, ...otherDetails } = foundUser._doc;
+
+    return res.status(200).json({
+      success: true,
+      message: "User logged in successfully",
+      user: otherDetails,
+      token,
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
