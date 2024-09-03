@@ -1,10 +1,46 @@
-import React from "react";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { app } from "../firebase";
+import { useDispatch } from "react-redux";
+import { logInFailure, logInSuccess } from "../features/user/userSlice";
+import Axios from "../utils/axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const OAuthButton = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleGoogleAuth = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const auth = getAuth(app);
+
+      const oauthResponse = await signInWithPopup(auth, provider);
+
+      const user = {
+        name: oauthResponse.user.displayName,
+        email: oauthResponse.user.email,
+        image: oauthResponse.user.photoURL,
+      };
+
+      const response = await Axios.post("/auth/googleAuth", user);
+
+      if (response.data.success === true) {
+        localStorage.setItem("token", response.data.token);
+        dispatch(logInSuccess(response.data));
+        toast.success(response.data.message);
+        navigate("/");
+      }
+    } catch (error) {
+      dispatch(logInFailure("Something went wrong. Please try again"));
+    }
+  };
   return (
     <button
+      type="button"
       aria-label="Sign in with Google"
       className="btn-primary flex items-center p-0.5"
+      onClick={handleGoogleAuth}
     >
       <div className="flex items-center justify-center bg-white w-9 h-9 rounded-l">
         <svg
