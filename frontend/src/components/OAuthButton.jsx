@@ -27,7 +27,7 @@ const OAuthButton = () => {
 
       if (response.data.success === true) {
         localStorage.setItem("token", response.data.token);
-        dispatch(logInSuccess(response.data));
+        dispatch(logInSuccess(response.data.user));
         toast.success(response.data.message);
         navigate("/");
       }
