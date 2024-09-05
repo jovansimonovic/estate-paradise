@@ -14,10 +14,14 @@
   }
 
   .btn-primary {
-    @apply bg-slate-700 hover:bg-slate-800 text-white font-semibold rounded-md py-2;
+    @apply bg-slate-700 hover:bg-slate-800 text-white font-semibold rounded-md p-2;
   }
 
   .btn-secondary {
-    @apply bg-green-700 hover:bg-green-800 text-white font-semibold rounded-md py-2;
+    @apply bg-green-700 hover:bg-green-800 text-white font-semibold rounded-md p-2;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-semibold rounded-md p-2;
   }
 }
