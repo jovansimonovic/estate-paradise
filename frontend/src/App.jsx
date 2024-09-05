@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
@@ -18,7 +19,9 @@ const App = () => {
         <Route path="/" exact element={<Home />} />
         <Route path="/login" exact element={<LogIn />} />
         <Route path="/signup" exact element={<SignUp />} />
-        <Route path="/profile" exact element={<Profile />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/profile" exact element={<Profile />} />
+        </Route>
         <Route path="/about" exact element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
