@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import PasswordInput from "../components/PasswordInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -8,6 +8,13 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateStart,
+  updateSuccess,
+  updateFailure,
+} from "../features/user/userSlice";
+import { AxiosAuth } from "../utils/axios";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const UploadState = {
@@ -18,20 +25,14 @@ const Profile = () => {
   };
 
   const { user, loading, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState("");
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadState, setUploadState] = useState(UploadState.IDLE);
   const [formData, setFormData] = useState({});
 
   const fileRef = useRef(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-  };
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -49,18 +50,46 @@ const Profile = () => {
         setUploadProgress(Math.round(progress));
       },
       // handles upload error
-      (error) => {
+      () => {
         setUploadState(UploadState.ERROR);
         setUploadProgress(0);
       },
       // handles upload success
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setFormData({ ...formData, image: downloadURL });
+          setFormData({ ...formData, avatar: downloadURL });
           setUploadState(UploadState.SUCCESS);
         });
       }
     );
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(updateStart());
+
+    try {
+      const response = await AxiosAuth.put(
+        `/user/update/${user._id}`,
+        formData
+      );
+
+      if (response.data.success === false) {
+        dispatch(updateFailure(response.data.message));
+        return;
+      }
+
+      if (response.data.success === true) {
+        dispatch(updateSuccess(response.data.user));
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      dispatch(updateFailure(error.response.data.message));
+    }
   };
 
   useEffect(() => {
@@ -80,8 +109,8 @@ const Profile = () => {
             onChange={(e) => setFile(e.target.files[0])}
           />
           <img
-            src={formData.image || user.avatar}
-            alt="profile image"
+            src={formData.avatar || user.avatar}
+            alt="profile avatar"
             className="self-center rounded-full size-32 object-cover cursor-pointer mb-4"
             onClick={() => fileRef.current.click()}
           />
@@ -102,27 +131,26 @@ const Profile = () => {
           )}
           {uploadState === UploadState.SUCCESS && (
             <p className="text-slate-700 font-semibold mb-4">
-              Image uploaded successfully
+              ✔️ Image uploaded successfully
             </p>
           )}
           <input
             type="text"
             placeholder="user.username"
+            name="username"
             className="input-box mb-4"
-            value={user.username}
-            onChange={(e) => setUsername(e.target.value)}
+            defaultValue={user.username}
+            onChange={handleChange}
           />
           <input
             type="email"
             placeholder="Email"
+            name="email"
             className="input-box mb-4"
-            value={user.email}
-            onChange={(e) => setEmail(e.target.value)}
+            defaultValue={user.email}
+            onChange={handleChange}
           />
-          <PasswordInput
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <PasswordInput name="password" onChange={handleChange} />
           {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
           <button
             disabled={loading}
@@ -139,7 +167,7 @@ const Profile = () => {
         <div className="flex justify-between w-full">
           <button type="button" className="btn-primary">
             {" "}
-            Sign Out
+            Log Out
           </button>
           <button type="button" className="btn-danger">
             Delete Account
