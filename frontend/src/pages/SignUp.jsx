@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Axios from "../utils/axios";
+import {Axios} from "../utils/axios";
 import PasswordInput from "../components/PasswordInput";
 import { toast } from "react-toastify";
 import OAuthButton from "../components/OAuthButton";

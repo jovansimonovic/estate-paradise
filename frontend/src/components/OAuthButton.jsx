@@ -2,7 +2,7 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
 import { logInFailure, logInSuccess } from "../features/user/userSlice";
-import Axios from "../utils/axios";
+import {Axios} from "../utils/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 

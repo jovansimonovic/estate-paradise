@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
-import Axios from "../utils/axios";
+import { Axios } from "../utils/axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
