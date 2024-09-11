@@ -12,9 +12,13 @@ import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteFailure,
+  deleteStart,
+  deleteSuccess,
 } from "../features/user/userSlice";
 import { AxiosAuth } from "../utils/axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const UploadState = {
@@ -33,6 +37,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
 
   const fileRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -78,17 +83,28 @@ const Profile = () => {
         formData
       );
 
-      if (response.data.success === false) {
-        dispatch(updateFailure(response.data.message));
-        return;
-      }
-
       if (response.data.success === true) {
         dispatch(updateSuccess(response.data.user));
         toast.success(response.data.message);
       }
     } catch (error) {
       dispatch(updateFailure(error.response.data.message));
+    }
+  };
+
+  const handleDelete = async () => {
+    dispatch(deleteStart());
+
+    try {
+      const response = await AxiosAuth.delete(`/user/delete/${user._id}`);
+      if (response.data.success === true) {
+        dispatch(deleteSuccess());
+        localStorage.removeItem("token");
+        toast.success(response.data.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      dispatch(deleteFailure(error.response.data.message));
     }
   };
 
@@ -169,7 +185,7 @@ const Profile = () => {
             {" "}
             Log Out
           </button>
-          <button type="button" className="btn-danger">
+          <button type="button" className="btn-danger" onClick={handleDelete}>
             Delete Account
           </button>
         </div>
