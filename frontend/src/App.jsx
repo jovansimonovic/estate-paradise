@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/about" exact element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <ToastContainer />
+      <ToastContainer position="bottom-left" />
     </Router>
   );
 };
