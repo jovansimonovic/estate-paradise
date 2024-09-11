@@ -45,12 +45,6 @@ const SignUp = () => {
       const formData = { username, email, password };
       const response = await Axios.post("/auth/signup", formData);
 
-      if (response.data.success === false) {
-        setError(response.data.message);
-        setLoading(false);
-        return;
-      }
-
       if (response.data.success === true) {
         toast.success(response.data.message);
         setError(null);

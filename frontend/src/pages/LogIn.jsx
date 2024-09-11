@@ -32,11 +32,6 @@ const LogIn = () => {
       const formData = { email, password };
       const response = await Axios.post("/auth/login", formData);
 
-      if (response.data.success === false) {
-        dispatch(logInFailure(response.data.message));
-        return;
-      }
-
       if (response.data.success === true) {
         dispatch(logInSuccess(response.data.user));
         localStorage.setItem("token", response.data.token);
