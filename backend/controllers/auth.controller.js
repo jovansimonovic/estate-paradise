@@ -31,17 +31,14 @@ export const signup = async (req, res, next) => {
   const newUser = new User({ username, email, password: hashedPassword });
 
   try {
-    const userExists = await User.findOne({ username, email });
-
-    if (userExists) {
-      return next(errorHandler(409, "User already exists"));
-    }
-
     await newUser.save();
     return res
       .status(201)
       .json({ success: true, message: "User created successfully" });
   } catch (error) {
+    if (error.code === 11000) {
+      return next(errorHandler(409, "User already exists"));
+    }
     next(errorHandler(500, error.message));
   }
 };
@@ -76,7 +73,7 @@ export const login = async (req, res, next) => {
 
     const { password: hashedPassword, ...otherDetails } = foundUser._doc;
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "User logged in successfully",
       user: otherDetails,
