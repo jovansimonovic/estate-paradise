@@ -15,6 +15,7 @@ import {
   deleteFailure,
   deleteStart,
   deleteSuccess,
+  logout,
 } from "../features/user/userSlice";
 import { AxiosAuth } from "../utils/axios";
 import { toast } from "react-toastify";
@@ -69,6 +70,10 @@ const Profile = () => {
     );
   };
 
+  useEffect(() => {
+    if (file) handleFileUpload(file);
+  }, [file]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -108,9 +113,11 @@ const Profile = () => {
     }
   };
 
-  useEffect(() => {
-    if (file) handleFileUpload(file);
-  }, [file]);
+  const handleLogout = () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <div className="mt-20 flex justify-center text-center">
@@ -181,7 +188,7 @@ const Profile = () => {
           </div>
         </form>
         <div className="flex justify-between w-full">
-          <button type="button" className="btn-primary">
+          <button type="button" className="btn-primary" onClick={handleLogout}>
             {" "}
             Log Out
           </button>
