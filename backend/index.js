@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
+import listingRouter from "./routes/listing.route.js";
 
 const app = express();
 
@@ -27,6 +28,7 @@ mongoose
 // routers
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/listing", listingRouter);
 
 // middleware for error handling
 app.use((err, req, res, next) => {
