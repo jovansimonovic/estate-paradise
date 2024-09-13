@@ -59,7 +59,7 @@ const SignUp = () => {
 
   return (
     <div className="mt-36 flex flex-col justify-center items-center">
-      <h2 className="text-3xl font-semibold">Sign Up</h2>
+      <h1 className="text-3xl font-semibold">Sign Up</h1>
       <form className="flex flex-col mt-8 w-[380px]" onSubmit={handleSubmit}>
         <input
           type="text"

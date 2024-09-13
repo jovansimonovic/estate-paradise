@@ -122,8 +122,8 @@ const Profile = () => {
   return (
     <div className="mt-20 flex justify-center text-center">
       <div className="w-[380px]">
-        <h2 className="text-3xl font-semibold">Profile</h2>
-        <form className="flex flex-col my-8 " onSubmit={handleSubmit}>
+        <h1 className="text-3xl font-semibold">Profile</h1>
+        <form className="flex flex-col mt-4" onSubmit={handleSubmit}>
           <input
             type="file"
             accept="image/*"
