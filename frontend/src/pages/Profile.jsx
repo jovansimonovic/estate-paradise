@@ -19,7 +19,7 @@ import {
 } from "../features/user/userSlice";
 import { AxiosAuth } from "../utils/axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const UploadState = {
@@ -182,11 +182,13 @@ const Profile = () => {
           >
             {loading ? "Loading..." : "Update Profile"}
           </button>
-          <div className="grid grid-rows-2 gap-y-2 mb-4">
-            <button className="btn-primary">Create Listing</button>
-            <button className="btn-secondary">Show All Listings</button>
-          </div>
         </form>
+        <div className="grid grid-rows-2 gap-y-2 mb-8">
+          <button className="btn-secondary">
+            <Link to="/create-listing">Create Listing</Link>
+          </button>
+          <button className="btn-primary">Show All Listings</button>
+        </div>
         <div className="flex justify-between w-full">
           <button type="button" className="btn-primary" onClick={handleLogout}>
             {" "}
