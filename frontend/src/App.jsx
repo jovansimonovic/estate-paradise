@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/profile" exact element={<Profile />} />
         </Route>
         <Route path="/about" exact element={<About />} />
-        <Route path="create-listing" exact element={<CreateListing />} />
+        <Route path="/create-listing" exact element={<CreateListing />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer position="bottom-left" />
