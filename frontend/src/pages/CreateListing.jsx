@@ -8,7 +8,7 @@ const CreateListing = () => {
   return (
     <main className="mt-20 px-4 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center">Create a Listing</h1>
-      <form className="mt-8 flex flex-col lg:flex-row gap-x-4">
+      <form className="mt-8 flex flex-col lg:flex-row gap-4">
         <div className="flex flex-col gap-y-4">
           <input
             type="text"
