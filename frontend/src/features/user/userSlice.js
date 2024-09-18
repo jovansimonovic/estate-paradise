@@ -15,8 +15,8 @@ export const userSlice = createSlice({
     },
     logInSuccess: (state, action) => {
       state.user = action.payload;
-      state.loading = false;
       state.error = null;
+      state.loading = false;
     },
     logInFailure: (state, action) => {
       state.error = action.payload;
@@ -24,16 +24,16 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
-      state.loading = false;
       state.error = null;
+      state.loading = false;
     },
     updateStart: (state) => {
       state.loading = true;
     },
     updateSuccess: (state, action) => {
       state.user = action.payload;
-      state.loading = false;
       state.error = null;
+      state.loading = false;
     },
     updateFailure: (state, action) => {
       state.error = action.payload;
@@ -44,8 +44,8 @@ export const userSlice = createSlice({
     },
     deleteSuccess: (state) => {
       state.user = null;
-      state.loading = false;
       state.error = null;
+      state.loading = false;
     },
     deleteFailure: (state, action) => {
       state.error = action.payload;
