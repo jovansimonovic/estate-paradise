@@ -1,7 +1,18 @@
 import { errorHandler } from "../utils/error.js";
 import Listing from "../models/listing.model.js";
 
-export const getAllListings = async (req, res, next) => {};
+export const getAllListings = async (req, res, next) => {
+  try {
+    const listings = await Listing.find();
+
+    return res.status(200).json({
+      success: true,
+      listings,
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
 
 export const getListingById = async (req, res, next) => {};
 
