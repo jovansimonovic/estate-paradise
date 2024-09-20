@@ -62,9 +62,9 @@ export const createListing = async (req, res, next) => {
     );
   }
 
-  if (discountPrice < 1 || discountPrice > 100000000) {
+  if (discountPrice > 100000000) {
     return next(
-      errorHandler(400, "Discount price must be between 1 and 100,000,000")
+      errorHandler(400, "Discount price must be less than 100,000,000")
     );
   }
 
