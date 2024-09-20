@@ -11,9 +11,9 @@ import { verifyToken } from "../utils/jwt.js";
 const router = Router();
 
 router.get("/get-all", getAllListings);
-router.get("/:id", getListingById);
+router.get("/get/:id", getListingById);
 router.post("/create", verifyToken, createListing);
-router.put("/:id", verifyToken, updateListing);
-router.delete("/:id", verifyToken, deleteListing);
+router.put("/update/:id", verifyToken, updateListing);
+router.delete("/delete/:id", verifyToken, deleteListing);
 
 export default router;
