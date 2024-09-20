@@ -30,7 +30,7 @@ const CreateListing = () => {
     description: "",
     address: "",
     regularPrice: 1,
-    discountPrice: 1,
+    discountPrice: 0,
     bathrooms: 1,
     bedrooms: 1,
     isFurnished: false,
@@ -283,7 +283,6 @@ const CreateListing = () => {
             <input
               type="number"
               name="regularPrice"
-              defaultValue={1}
               min={1}
               max={100000000}
               className="input-box"
@@ -295,12 +294,12 @@ const CreateListing = () => {
               <span className="text-xs">($ / Month)</span>
             </div>
           </div>
-          <div className="flex items-center gap-x-2">
+          {formData.isOffered && (
+            <div className="flex items-center gap-x-2">
             <input
               type="number"
               name="discountPrice"
-              defaultValue={1}
-              min={1}
+              min={0}
               max={100000000}
               className="input-box"
               required
@@ -311,6 +310,7 @@ const CreateListing = () => {
               <span className="text-xs">($ / Month)</span>
             </div>
           </div>
+          )}
           {error && <p className="text-red-500 font-semibold">{error}</p>}
         </div>
         <div className="flex flex-col flex-1 gap-y-2">
