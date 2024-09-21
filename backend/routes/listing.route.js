@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   getAllListings,
-  getListingById,
+  getListingsById,
   createListing,
   updateListing,
   deleteListing,
@@ -11,7 +11,7 @@ import { verifyToken } from "../utils/jwt.js";
 const router = Router();
 
 router.get("/get-all", getAllListings);
-router.get("/get/:id", getListingById);
+router.get("/get-all-by-id", verifyToken, getListingsById);
 router.post("/create", verifyToken, createListing);
 router.put("/update/:id", verifyToken, updateListing);
 router.delete("/delete/:id", verifyToken, deleteListing);

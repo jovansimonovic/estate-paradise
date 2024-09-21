@@ -14,7 +14,24 @@ export const getAllListings = async (req, res, next) => {
   }
 };
 
-export const getListingById = async (req, res, next) => {};
+export const getListingsById = async (req, res, next) => {
+  try {
+    const foundListings = await Listing.find({ createdBy: req.user.id });
+
+    if (foundListings.length === 0) {
+      return res.status(404).json({
+        message: "No listings found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      foundListings,
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
 
 export const createListing = async (req, res, next) => {
   const bedrooms = Number(req.body.bedrooms);
