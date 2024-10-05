@@ -143,11 +143,9 @@ const CreateListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(createStart());
-    console.log(formData);
 
     try {
       const response = await AxiosAuth.post("/listing/create", formData);
-      console.log(response.data);
 
       if (response.data.success === true) {
         dispatch(createSuccess(response.data.listing));
@@ -161,10 +159,10 @@ const CreateListing = () => {
   };
 
   return (
-    <main className="mt-20 mb-8 lg:mb-0 px-4 max-w-4xl mx-auto">
+    <main className="max-w-4xl px-4 mx-auto mt-20 mb-8 lg:mb-0">
       <h1 className="text-3xl font-semibold text-center">Create a Listing</h1>
       <form
-        className="mt-8 flex flex-col lg:flex-row gap-4"
+        className="flex flex-col gap-4 mt-8 lg:flex-row"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col gap-y-4">
@@ -198,7 +196,7 @@ const CreateListing = () => {
             required
             onChange={handleChange}
           />
-          <div className="text-lg flex flex-col flex-wrap gap-x-4">
+          <div className="flex flex-col flex-wrap text-lg gap-x-4">
             <div className="flex items-center gap-x-4">
               <span className="flex items-center gap-x-2">
                 <input
@@ -296,22 +294,22 @@ const CreateListing = () => {
           </div>
           {formData.isOffered && (
             <div className="flex items-center gap-x-2">
-            <input
-              type="number"
-              name="discountPrice"
-              min={0}
-              max={100000000}
-              className="input-box"
-              required
-              onChange={handleChange}
-            />
-            <div className="flex flex-col items-center">
-              <span>Discount Price</span>
-              <span className="text-xs">($ / Month)</span>
+              <input
+                type="number"
+                name="discountPrice"
+                min={0}
+                max={100000000}
+                className="input-box"
+                required
+                onChange={handleChange}
+              />
+              <div className="flex flex-col items-center">
+                <span>Discount Price</span>
+                <span className="text-xs">($ / Month)</span>
+              </div>
             </div>
-          </div>
           )}
-          {error && <p className="text-red-500 font-semibold">{error}</p>}
+          {error && <p className="font-semibold text-red-500">{error}</p>}
         </div>
         <div className="flex flex-col flex-1 gap-y-2">
           <div>
@@ -326,7 +324,7 @@ const CreateListing = () => {
                 type="file"
                 accept="image/*"
                 multiple
-                className="input-box flex-1"
+                className="flex-1 input-box"
                 onChange={(e) => setFiles(e.target.files)}
               />
               <button
@@ -340,39 +338,39 @@ const CreateListing = () => {
                   : "Upload"}
               </button>
             </div>
-            <div className="w-full mt-2 flex justify-center flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center w-full gap-2 mt-2">
               {formData.images.length > 0 &&
                 formData.images.map((url, index) => (
                   <div key={index} className="relative">
                     <img
                       src={url}
                       alt="listing image"
-                      className="size-20 object-cover rounded"
+                      className="object-cover rounded size-20"
                     />
                     <IoMdCloseCircle
-                      className="absolute top-0 right-0 text-white size-6 cursor-pointer opacity-80 hover:opacity-90"
+                      className="absolute top-0 right-0 text-white cursor-pointer size-6 opacity-80 hover:opacity-90"
                       onClick={() => handleDeleteImage(index)}
                     />
                   </div>
                 ))}
             </div>
             {uploadState === UploadState.ERROR && (
-              <p className="text-red-500 font-semibold mt-2">
+              <p className="mt-2 font-semibold text-red-500">
                 Failed to upload images (images must be smaller than 2MB)
               </p>
             )}
             {uploadState === UploadState.UPLOADING && (
-              <p className="text-slate-700 font-semibold mt-2">
+              <p className="mt-2 font-semibold text-slate-700">
                 Uploading images... {uploadProgress}%
               </p>
             )}
             {uploadState === UploadState.SUCCESS && (
-              <p className="text-slate-700 font-semibold mt-2">
+              <p className="mt-2 font-semibold text-slate-700">
                 ✔️ Images uploaded successfully
               </p>
             )}
           </div>
-          <button type="submit" className="btn-primary mt-2" disabled={loading}>
+          <button type="submit" className="mt-2 btn-primary" disabled={loading}>
             {loading ? "Creating..." : "Create Listing"}
           </button>
         </div>
