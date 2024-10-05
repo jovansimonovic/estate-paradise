@@ -14,8 +14,7 @@ export const listingSlice = createSlice({
       state.error = null;
       state.loading = true;
     },
-    createSuccess: (state, action) => {
-      state.listing = action.payload;
+    createSuccess: (state) => {
       state.error = null;
       state.loading = false;
     },

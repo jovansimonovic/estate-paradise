@@ -148,7 +148,7 @@ const CreateListing = () => {
       const response = await AxiosAuth.post("/listing/create", formData);
 
       if (response.data.success === true) {
-        dispatch(createSuccess(response.data.listing));
+        dispatch(createSuccess());
         toast.success(response.data.message);
         navigate("/profile");
       }
