@@ -26,7 +26,7 @@ export const getListingsById = async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      foundListings,
+      listings: foundListings,
     });
   } catch (error) {
     next(errorHandler(500, error.message));
