@@ -131,4 +131,14 @@ export const createListing = async (req, res, next) => {
 
 export const updateListing = async (req, res, next) => {};
 
-export const deleteListing = async (req, res, next) => {};
+export const deleteListing = async (req, res, next) => {
+  try {
+    await Listing.findByIdAndDelete(req.params.id);
+    return res.status(200).json({
+      success: true,
+      message: "Listing deleted successfully",
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
