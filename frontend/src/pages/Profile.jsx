@@ -224,7 +224,7 @@ const Profile = () => {
       </div>
       <div className="mx-4 my-8">
         <h2 className="text-3xl font-semibold">Your Listings</h2>
-        <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 place-items-center">
+        <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 place-items-center">
           {listings.map((listing) => (
             <ListingCard key={listing._id} listing={listing} />
           ))}
