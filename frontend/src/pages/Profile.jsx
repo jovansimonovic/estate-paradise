@@ -134,6 +134,19 @@ const Profile = () => {
     navigate("/login");
   };
 
+  const handleDeleteListing = async (listing) => {
+    try {
+      const response = await AxiosAuth.delete(`/listing/delete/${listing._id}`);
+
+      if (response.data.success === true) {
+        setListings(listings.filter((l) => l._id !== listing._id));
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-center mt-20 text-center">
@@ -226,7 +239,11 @@ const Profile = () => {
         <h2 className="text-3xl font-semibold">Your Listings</h2>
         <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 place-items-center">
           {listings.map((listing) => (
-            <ListingCard key={listing._id} listing={listing} />
+            <ListingCard
+              key={listing._id}
+              listing={listing}
+              handleDeleteListing={handleDeleteListing}
+            />
           ))}
         </div>
       </div>

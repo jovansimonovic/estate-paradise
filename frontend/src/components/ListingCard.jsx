@@ -1,21 +1,7 @@
 import React from "react";
-import { AxiosAuth } from "../utils/axios";
-import { toast } from "react-toastify";
 
-const ListingCard = ({ listing }) => {
+const ListingCard = ({ listing, handleDeleteListing }) => {
   const handleUpdateListing = () => {};
-
-  const handleDeleteListing = async (listing) => {
-    try {
-      const response = await AxiosAuth.delete(`/listing/delete/${listing._id}`);
-
-      if (response.data.success === true) {
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  };
 
   return (
     <div className="flex flex-col h-full bg-white border border-gray-200 rounded-lg shadow max-w-96">
