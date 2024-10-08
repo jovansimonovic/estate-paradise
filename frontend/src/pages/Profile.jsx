@@ -20,6 +20,7 @@ import {
 import { AxiosAuth } from "../utils/axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
+import ListingCard from "../components/ListingCard";
 
 const Profile = () => {
   const UploadState = {
@@ -36,9 +37,23 @@ const Profile = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadState, setUploadState] = useState(UploadState.IDLE);
   const [formData, setFormData] = useState({});
+  const [listings, setListings] = useState([]);
 
   const fileRef = useRef(null);
   const navigate = useNavigate();
+
+  const loadUserListings = async () => {
+    try {
+      const response = await AxiosAuth.get("/listing/get-all-by-id");
+      setListings(response.data.listings);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    loadUserListings();
+  }, []);
 
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
@@ -120,86 +135,102 @@ const Profile = () => {
   };
 
   return (
-    <div className="mt-20 flex justify-center text-center">
-      <div className="w-[380px]">
-        <h1 className="text-3xl font-semibold">Profile</h1>
-        <form className="flex flex-col mt-4" onSubmit={handleSubmit}>
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            ref={fileRef}
-            onChange={(e) => setFile(e.target.files[0])}
-          />
-          <img
-            src={formData.avatar || user.avatar}
-            alt="profile avatar"
-            className="self-center rounded-full size-32 object-cover cursor-pointer mb-4"
-            onClick={() => fileRef.current.click()}
-          />
-          {uploadState === UploadState.ERROR && (
-            <>
-              <p className="text-red-500 font-semibold">
-                Failed to upload image
+    <>
+      <div className="flex justify-center mt-20 text-center">
+        <div className="w-[380px]">
+          <h1 className="text-3xl font-semibold">Profile</h1>
+          <form className="flex flex-col mt-4" onSubmit={handleSubmit}>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              ref={fileRef}
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            <img
+              src={formData.avatar || user.avatar}
+              alt="profile avatar"
+              className="self-center object-cover mb-4 rounded-full cursor-pointer size-32"
+              onClick={() => fileRef.current.click()}
+            />
+            {uploadState === UploadState.ERROR && (
+              <>
+                <p className="font-semibold text-red-500">
+                  Failed to upload image
+                </p>
+                <p className="mb-4 font-semibold text-red-500">
+                  (image must be smaller than 2MB)
+                </p>
+              </>
+            )}
+            {uploadState === UploadState.UPLOADING && (
+              <p className="mb-4 font-semibold text-slate-700">
+                {`Uploading... ${uploadProgress}%`}
               </p>
-              <p className="text-red-500 font-semibold mb-4">
-                (image must be smaller than 2MB)
+            )}
+            {uploadState === UploadState.SUCCESS && (
+              <p className="mb-4 font-semibold text-slate-700">
+                ✔️ Image uploaded successfully
               </p>
-            </>
-          )}
-          {uploadState === UploadState.UPLOADING && (
-            <p className="text-slate-700 font-semibold mb-4">
-              {`Uploading... ${uploadProgress}%`}
-            </p>
-          )}
-          {uploadState === UploadState.SUCCESS && (
-            <p className="text-slate-700 font-semibold mb-4">
-              ✔️ Image uploaded successfully
-            </p>
-          )}
-          <input
-            type="text"
-            placeholder="user.username"
-            name="username"
-            className="input-box mb-4"
-            defaultValue={user.username}
-            onChange={handleChange}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            className="input-box mb-4"
-            defaultValue={user.email}
-            onChange={handleChange}
-          />
-          <PasswordInput name="password" onChange={handleChange} />
-          {error && <p className="text-red-500 font-semibold mb-4">{error}</p>}
-          <button
-            disabled={loading}
-            type="submit"
-            className="btn-primary disabled:opacity-80 mb-8"
-          >
-            {loading ? "Loading..." : "Update Profile"}
-          </button>
-        </form>
-        <div className="grid grid-rows-2 gap-y-2 mb-8">
-          <button className="btn-secondary">
-            <Link to="/create-listing">Create Listing</Link>
-          </button>
-          <button className="btn-primary">Show All Listings</button>
-        </div>
-        <div className="flex justify-between w-full">
-          <button type="button" className="btn-primary" onClick={handleLogout}>
-            {" "}
-            Log Out
-          </button>
-          <button type="button" className="btn-danger" onClick={handleDelete}>
-            Delete Account
-          </button>
+            )}
+            <input
+              type="text"
+              placeholder="user.username"
+              name="username"
+              className="mb-4 input-box"
+              defaultValue={user.username}
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              className="mb-4 input-box"
+              defaultValue={user.email}
+              onChange={handleChange}
+            />
+            <PasswordInput name="password" onChange={handleChange} />
+            {error && (
+              <p className="mb-4 font-semibold text-red-500">{error}</p>
+            )}
+            <button
+              disabled={loading}
+              type="submit"
+              className="mb-8 btn-primary disabled:opacity-80"
+            >
+              {loading ? "Loading..." : "Update Profile"}
+            </button>
+          </form>
+          <div className="grid grid-rows-2 mb-8 gap-y-2">
+            <button className="btn-secondary">
+              <Link to="/create-listing">Create Listing</Link>
+            </button>
+            <button className="btn-primary">Show All Listings</button>
+          </div>
+          <div className="flex justify-between w-full">
+            <button
+              type="button"
+              className="btn-primary"
+              onClick={handleLogout}
+            >
+              {" "}
+              Log Out
+            </button>
+            <button type="button" className="btn-danger" onClick={handleDelete}>
+              Delete Account
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+      <div className="mx-4 my-8">
+        <h2 className="text-3xl font-semibold">Your Listings</h2>
+        <div className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 place-items-center">
+          {listings.map((listing) => (
+            <ListingCard key={listing._id} listing={listing} />
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
