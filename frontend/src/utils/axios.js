@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from "../store/store";
+import { logout } from "../features/user/userSlice";
 
 export const Axios = axios.create({
   baseURL: `http://localhost:${import.meta.env.VITE_PORT}`,
@@ -22,7 +24,15 @@ AxiosAuth.interceptors.request.use(
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
+  (error) => Promise.reject(error)
+);
+
+AxiosAuth.interceptors.response.use(
+  (response) => response,
   (error) => {
-    return Promise.reject(error);
+    if (error.response.status === 401 || error.response.status === 403) {
+      store.dispatch(logout());
+      localStorage.removeItem("token");
+    }
   }
 );
