@@ -21,6 +21,7 @@ export const updateUser = async (req, res, next) => {
           password: req.body.password,
           avatar: req.body.avatar,
         },
+        $inc: { __v: 1 },
       },
       { new: true }
     );
