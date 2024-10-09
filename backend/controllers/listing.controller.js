@@ -129,7 +129,38 @@ export const createListing = async (req, res, next) => {
   }
 };
 
-export const updateListing = async (req, res, next) => {};
+export const updateListing = async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id);
+
+  if (!listing) {
+    return next(errorHandler(404, "Listing not found"));
+  }
+
+  if (listing.createdBy.toString() !== req.user.id) {
+    return next(errorHandler(403, "You can only update your own listings"));
+  }
+
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          ...req.body,
+        },
+        $inc: { __v: 1 },
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Listing updated successfully",
+      listing: updatedListing,
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
 
 export const deleteListing = async (req, res, next) => {
   try {
