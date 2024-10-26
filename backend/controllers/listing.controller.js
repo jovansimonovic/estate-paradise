@@ -33,6 +33,23 @@ export const getListingsById = async (req, res, next) => {
   }
 };
 
+export const getOneListing = async (req, res, next) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+
+    if (!listing) {
+      return next(errorHandler(404, "Listing not found"));
+    }
+
+    return res.status(200).json({
+      success: true,
+      listing,
+    });
+  } catch (error) {
+    next(errorHandler(500, error.message));
+  }
+};
+
 export const createListing = async (req, res, next) => {
   const bedrooms = Number(req.body.bedrooms);
   const bathrooms = Number(req.body.bathrooms);
