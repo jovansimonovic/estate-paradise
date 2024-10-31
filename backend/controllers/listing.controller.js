@@ -157,13 +157,13 @@ export const updateListing = async (req, res, next) => {
     return next(errorHandler(403, "You can only update your own listings"));
   }
 
+  const { __v, ...updateData } = req.body;
+
   try {
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       {
-        $set: {
-          ...req.body,
-        },
+        $set: updateData,
         $inc: { __v: 1 },
       },
       { new: true }
