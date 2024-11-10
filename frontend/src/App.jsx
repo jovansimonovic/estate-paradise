@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
+import Listing from "./pages/Listing";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/login" exact element={<LogIn />} />
         <Route path="/signup" exact element={<SignUp />} />
         <Route path="/about" exact element={<About />} />
+        <Route path="/listing/:id" exact element={<Listing />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" exact element={<Profile />} />
           <Route path="/create-listing" exact element={<CreateListing />} />
