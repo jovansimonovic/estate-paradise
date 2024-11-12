@@ -60,9 +60,9 @@ export const createListing = async (req, res, next) => {
     return next(errorHandler(400, "Name must be between 10 and 50 characters"));
   }
 
-  if (req.body.description.length < 10 || req.body.description.length > 300) {
+  if (req.body.description.length < 10 || req.body.description.length > 500) {
     return next(
-      errorHandler(400, "Description must be between 10 and 300 characters")
+      errorHandler(400, "Description must be between 10 and 500 characters")
     );
   }
 

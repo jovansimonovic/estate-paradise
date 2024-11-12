@@ -195,7 +195,7 @@ const UpdateListing = () => {
             name="description"
             placeholder="Description"
             minLength={10}
-            maxLength={300}
+            maxLength={500}
             rows={5}
             className="input-box"
             required
