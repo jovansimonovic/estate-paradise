@@ -16,19 +16,24 @@ const ListingCard = ({ listing, handleDeleteListing }) => {
         <p className="flex-grow mb-3 font-normal text-gray-700">
           {listing.description}
         </p>
-        <div className="flex justify-end gap-x-3">
-          <Link to={`/update-listing/${listing._id}`}>
-            <button type="button" className="px-4 btn-secondary">
-              Edit
-            </button>
+        <div className="flex justify-between">
+          <Link to={`/listing/${listing._id}`}>
+            <button type="button" className="px-4 btn-primary">View Listing</button>
           </Link>
-          <button
-            type="button"
-            className="px-4 btn-danger"
-            onClick={() => handleDeleteListing(listing)}
-          >
-            Delete
-          </button>
+          <div className="flex justify-end gap-x-3">
+            <Link to={`/update-listing/${listing._id}`}>
+              <button type="button" className="px-4 btn-secondary">
+                Edit
+              </button>
+            </Link>
+            <button
+              type="button"
+              className="px-4 btn-danger"
+              onClick={() => handleDeleteListing(listing)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
