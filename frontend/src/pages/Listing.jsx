@@ -76,7 +76,7 @@ const Listing = () => {
                   For Sale
                 </span>
               ) : (
-                <span className="p-2 font-semibold text-white bg-red-600 rounded-md">
+                <span className="p-2 font-semibold text-white rounded-md bg-slate-700">
                   For Rent
                 </span>
               )}
