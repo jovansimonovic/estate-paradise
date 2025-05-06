@@ -130,7 +130,7 @@ const Listing = () => {
               </>
             ) : (
               <p className="mb-2 text-2xl font-bold">
-                {listing.regularPrice?.toLocaleString()} €
+                {listing.regularPrice?.toLocaleString()} € {listing.type === "rent" && "/ month"}
               </p>
             )}
             <div className="flex items-center mb-2">
